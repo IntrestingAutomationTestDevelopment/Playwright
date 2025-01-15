@@ -1,0 +1,94 @@
+await page.screenshot({ path: 'screenshot.png' });
+await page.setInputFiles('input[type="file"]', 'path/to/file.txt');
+const [download] = await Promise.all([
+  page.waitForEvent('download'),
+  page.click('button#download')
+]);
+await download.saveAs('path/to/save/file.txt');
+#Handle AlertPrompts
+await page.screenshot({ path: 'screenshot.png' });
+await page.screenshot({ path: 'fullpage.png', fullPage: true });
+await page.setInputFiles('input[type="file"]', 'path/to/file.txt');
+const [download] = await Promise.all([
+  page.waitForEvent('download'),
+  page.click('button#download')
+]);
+For alert and prompt:
+javascript Copy code
+await download.saveAs('path/to/save/file.txt');
+page.on('dialog', async dialog => {
+  console.log(dialog.message());
+  await dialog.accept(); // Or dialog.dismiss()
+});
+For new browser windows/tabs:
+javascript
+Copy code
+
+const [newPage] = await Promise.all([
+  context.waitForEvent('page'),
+  page.click('button#open-window')
+]);
+
+
+page.waitForSelector(): Waits for a specific element to appear.
+page.waitForResponse(): Waits for a network request to be made.
+page.waitForTimeout(): Waits for a set amount of time.
+page.waitForFunction(): Waits for a JavaScript function to return a truthy value
+There are multiple ways of creating a payload in Rest Assured :
+1) Most simple way is passing JSON as a String :
+Response res = given().contentType(ContentType.JSON)
+.body("{\r\n" + " \"username\" : \"admin\",\r\n" + " \"password\" : \"password123\"\r\n" + "}")
+.when().post("/auth");
+
+2) passing JSON as a File :
+Response postRes = given().log().all().contentType(ContentType.JSON).body(new File("./src/test/resources/testdata/CreateBooking.json"))
+.when().post("/booking");
+
+3) using POJO :
+UserPOJO postUser = new UserPOJO("UserTesting", randomEmailGenerator(), "female", "active");
+Response postRes = given().contentType(ContentType.JSON)
+.header("Authorization", "Bearer Token")
+.body(postUser) // Serialization is happening here
+.when().log().all().post("/public/v2/users");
+
+4) using hashMap
+Map<String, Object> hmap = new HashMap<String,Object>();
+hmap.put("name", name);
+hmap.put("email", randomEmailGenerator());
+hmap.put("gender", gender);
+hmap.put("status", status);
+Response postRes = given().contentType(ContentType.JSON)
+.header("Authorization", "Bearer Token")
+.body(hmap) // Serialization is happening here
+.when().log().all().post("/public/v2/users");There are multiple ways of creating a payload in Rest Assured :
+1) Most simple way is passing JSON as a String :
+Response res = given().contentType(ContentType.JSON)
+.body("{\r\n" + " \"username\" : \"admin\",\r\n" + " \"password\" : \"password123\"\r\n" + "}")
+.when().post("/auth");
+
+2) passing JSON as a File :
+Response postRes = given().log().all().contentType(ContentType.JSON).body(new File("./src/test/resources/testdata/CreateBooking.json"))
+.when().post("/booking");
+
+3) using POJO :
+UserPOJO postUser = new UserPOJO("UserTesting", randomEmailGenerator(), "female", "active");
+Response postRes = given().contentType(ContentType.JSON)
+.header("Authorization", "Bearer Token")
+.body(postUser) // Serialization is happening here
+.when().log().all().post("/public/v2/users");
+
+4) using hashMap
+Map<String, Object> hmap = new HashMap<String,Object>();
+hmap.put("name", name);
+hmap.put("email", randomEmailGenerator());
+hmap.put("gender", gender);
+hmap.put("status", status);
+Response postRes = given().contentType(ContentType.JSON)
+.header("Authorization", "Bearer Token")
+.body(hmap) // Serialization is happening here
+.when().log().all().post("/public/v2/users");
+# Install Playwright
+npm install @playwright/test
+
+# Install supported browsers
+npx playwright install

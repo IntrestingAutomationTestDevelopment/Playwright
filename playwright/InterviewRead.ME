@@ -1,0 +1,137 @@
+Here are some common **Playwright interview questions** that you might encounter:
+
+### 1. **What is Playwright?**
+   - **Answer**: Playwright is an open-source test automation framework developed by Microsoft. It is used for 
+   automating browser interactions across different web applications, providing capabilities for end-to-end 
+   testing. Playwright supports modern web browsers like Chromium, Firefox, and WebKit, and allows testing on 
+   multiple platforms, such as Windows, macOS, and Linux.
+
+### 2. **How is Playwright different from Selenium?**
+   - **Answer**: Playwright has several advantages over Selenium:
+     - **Browser support**: Playwright supports multiple browsers like Chromium, Firefox, and WebKit, while 
+     						Selenium mainly supports Chromium-based browsers and Firefox.
+     - **Speed**: Playwright is faster as it interacts directly with the browser, whereas 
+     						Selenium relies on the WebDriver protocol, which introduces some latency.
+     - **Auto-waiting**: Playwright automatically waits for elements to be ready (e.g., visible, clickable) before
+     						 performing actions, while in Selenium, explicit waits are needed.
+     - **Headless Testing**: Playwright provides seamless headless testing out of the box.
+
+### 3. **How do you install Playwright?**
+   - **Answer**: You can install Playwright using npm (Node.js package manager):
+     ```bash
+     npm install playwright
+     ```
+     Playwright also allows you to install browsers automatically:
+     ```bash
+     npx playwright install
+     ```
+
+### 4. **How does Playwright handle multiple browsers and devices?**
+   - **Answer**: Playwright allows you to interact with multiple browsers (Chromium, WebKit, and Firefox) and emulate different devices. You can use `browserType.launch()` to launch the browser and `browserContext.newPage()` to interact with different contexts in the browser. For device emulation, Playwright provides predefined device profiles, and you can set the viewport size and user agent for mobile testing.
+
+### 5. **Explain Playwright’s concept of ‘Contexts’.**
+   - **Answer**: In Playwright, a browser context is like an isolated session within a browser. It allows you to create multiple independent sessions (e.g., for testing different users) while sharing the same browser instance. This reduces resource usage and speeds up testing. Contexts can also be used to simulate multiple tabs, different authentication states, etc.
+
+### 6. **How do you perform authentication in Playwright?**
+   - **Answer**: Authentication can be handled using cookies, basic authentication, or session tokens. One common method is using `browserContext.addCookies()` to manually set authentication cookies for a specific session.
+
+### 7. **What are some methods used to handle dynamic content in Playwright?**
+   - **Answer**: Playwright provides methods to handle dynamic content such as:
+     - `page.waitForSelector()`: Waits for a specific element to appear.
+     - `page.waitForResponse()`: Waits for a network request to be made.
+     - `page.waitForTimeout()`: Waits for a set amount of time.
+     - `page.waitForFunction()`: Waits for a JavaScript function to return a truthy value.
+
+### 8. **How do you take a screenshot and save it in Playwright?**
+   - **Answer**: You can take a screenshot using the `page.screenshot()` method:
+     ```javascript
+     await page.screenshot({ path: 'screenshot.png' });
+     ```
+     Playwright also allows you to capture full-page screenshots by setting the `fullPage` option:
+     ```javascript
+     await page.screenshot({ path: 'fullpage.png', fullPage: true });
+     ```
+
+### 9. **How do you handle file uploads and downloads in Playwright?**
+   - **Answer**:
+     - **File Upload**: You can trigger a file input element using `page.setInputFiles()`. Example:
+       ```javascript
+       await page.setInputFiles('input[type="file"]', 'path/to/file.txt');
+       ```
+     - **File Download**: Playwright allows monitoring of the download process:
+       ```javascript
+       const [download] = await Promise.all([
+         page.waitForEvent('download'),
+         page.click('button#download')
+       ]);
+       await download.saveAs('path/to/save/file.txt');
+       ```
+
+### 10. **How do you handle popups and dialogs in Playwright?**
+   - **Answer**: Playwright provides APIs to interact with popups and dialogs:
+     - For **alert** and **prompt**:
+       ```javascript
+       page.on('dialog', async dialog => {
+         console.log(dialog.message());
+         await dialog.accept(); // Or dialog.dismiss()
+       });
+       ```
+     - For **new browser windows/tabs**:
+       ```javascript
+       const [newPage] = await Promise.all([
+         context.waitForEvent('page'),
+         page.click('button#open-window')
+       ]);
+       ```
+
+### 11. **How do you run Playwright tests in parallel?**
+   - **Answer**: Playwright supports running tests in parallel by using multiple contexts or browser instances. It also integrates well with testing frameworks like Jest, Mocha, or Playwright Test. You can run multiple tests in parallel by configuring the test runner to run in parallel, for example, in Playwright Test:
+     ```bash
+     npx playwright test --project=chromium --workers=4
+     ```
+
+### 12. **Explain how Playwright handles intercepting network requests.**
+   - **Answer**: Playwright allows you to intercept network requests using `page.route()` to mock or modify network traffic. You can capture requests and mock responses:
+     ```javascript
+     await page.route('**/api/*', (route, request) => {
+       route.continue({ url: 'https://new-api.com/data' });
+     });
+     ```
+
+### 13. **How do you perform keyboard actions in Playwright?**
+   - **Answer**: You can use `page.keyboard` to simulate keyboard input:
+     ```javascript
+     await page.keyboard.type('Hello World');
+     await page.keyboard.press('Enter');
+     ```
+
+### 14. **How do you handle waiting in Playwright?**
+   - **Answer**: Playwright has several waiting mechanisms:
+     - Implicit waiting (e.g., `waitForSelector()`, `waitForTimeout()`).
+     - Explicit waiting with `page.waitForFunction()` or `page.waitForEvent()`.
+     - Auto-waiting: Playwright automatically waits for elements to be in the correct state before actions are performed.
+
+### 15. **How do you perform testing on mobile devices using Playwright?**
+   - **Answer**: You can simulate mobile devices using Playwright’s `browserContext` to emulate specific devices:
+     ```javascript
+     const context = await browser.newContext({
+       ...devices['iPhone 12']
+     });
+     const page = await context.newPage();
+     await page.goto('https://example.com');
+     ```
+
+### 16. **How do you debug Playwright tests?**
+   - **Answer**: Playwright provides several debugging tools:
+     - **Headful Mode**: You can run tests in headful mode to visualize the tests.
+     - **Playwright Inspector**: Run tests with `DEBUG=pw:api` to enable Playwright Inspector for interactive debugging.
+     - **`page.pause()`**: Pauses the execution to allow for manual inspection.
+
+### 17. **What is the `expect` API in Playwright?**
+   - **Answer**: The `expect` API is used to make assertions in tests. It is part of the Playwright Test framework, which integrates with Jest-style assertions:
+     ```javascript
+     await expect(page).toHaveText('Hello World');
+     await expect(page.locator('button')).toBeVisible();
+     ```
+
+These questions can help you understand the basics of Playwright and how it is used for automating browser-based testing. Be prepared to explain the concepts and demonstrate them practically as part of your interview process.
